@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "title": "First post",
+        "content": "This is the first post."
+    },
+    {
+        "id": 2,
+        "title": "Second post",
+        "content": "This is the second post."
+    },
+    {
+        "title": "Camelot ist abgebrannt!",
+        "content": "He, ihr Blechnasen! Wer hat da wieder mit Feuer gespielt? Merlin! Nicht wegducken! ",
+        "id": 3
+    }
+]
