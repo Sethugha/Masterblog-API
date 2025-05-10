@@ -17,7 +17,7 @@ def get_highest_id():
     posts = load_json('data.json')
     for post in posts:
         ids.append(post['id'])
-    return max(ids)
+    return int(max(ids))
 
 
 def delete_post(id):
@@ -26,7 +26,7 @@ def delete_post(id):
         if post['id'] == id:
             posts.remove(post)
             save_json(posts)
-            return post
+            return f"Successfully deleted {post}"
     return None
 
 
@@ -41,7 +41,7 @@ def add_post(post):
 def find_post_by_id(id):
     posts = load_json('data.json')
     for post in posts:
-        if posts['id'] == id:
+        if post['id'] == id:
             return post
     return None
 
@@ -52,7 +52,7 @@ def update_post(updated_post, changes):
         if post['id'] == updated_post['id']:
             post.update(changes)
             save_json(posts)
-            return post
+            return f"Successfully changed post: {post}"
     return None
 
 
