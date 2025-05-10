@@ -2,12 +2,17 @@ from flask import Flask, jsonify, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 import storage
 
 app = Flask(__name__)
 limiter = Limiter(app=app, key_func=get_remote_address)
 CORS(app)  # This will enable CORS for all routes
+SWAGGER_URL="/api/docs"  # (1) swagger endpoint e.g. HTTP://localhost:5002/api/docs
+API_URL="/static/masterblog.json"
 
+
+#app.run(host="0.0.0.0", port=5002, debug=True)
 
 @app.route('/api/posts', methods=['GET'])
 @limiter.limit("10/minute") #Limit to 10 requests per minute
@@ -111,5 +116,17 @@ def validate_post_data(data):
     return True
 
 
+
+
+
 if __name__ == '__main__':
+    swagger_ui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': 'Masterblog-API'  # (3) You can change this if you like
+        }
+    )
+    app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
+
     app.run(host="0.0.0.0", port=5002, debug=True)
