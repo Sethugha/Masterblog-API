@@ -1,4 +1,3 @@
-import logging
 from flask import Flask, jsonify, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -9,11 +8,9 @@ app = Flask(__name__)
 limiter = Limiter(app=app, key_func=get_remote_address)
 CORS(app)  # This will enable CORS for all routes
 
-#configure logging
-#logging.basicConfig(filename='log.txt', filemode='w', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 @app.route('/api/posts', methods=['GET'])
-#@limiter.limit("10/minute") #Limit to 10 requests per minute
+@limiter.limit("10/minute") #Limit to 10 requests per minute
 def get_posts():
     posts = storage.load_json("data.json")
     title = request.args.get('title')

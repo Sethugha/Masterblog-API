@@ -1,2 +1,0 @@
-2025-05-10 00:59:51 WARNING:  * Debugger is active!
-2025-05-10 00:59:51 INFO:  * Debugger PIN: 203-256-050
