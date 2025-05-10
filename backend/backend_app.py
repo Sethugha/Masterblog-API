@@ -25,15 +25,24 @@ def get_posts():
         collection = [post for post in posts if content in post.get('content')]
         return jsonify(collection)
 
+    sort = request.args.get('sort')
+    direction = request.args.get('direction')
+    if sort and direction:
+        if direction == 'desc':
+            sorted_posts = sorted(posts, key=lambda item: item[sort], reverse=True)
+        else:
+            sorted_posts = sorted(posts, key=lambda item: item[sort])
+
+    else:
+        sorted_posts = posts
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 10))
     if page and limit:
         start_index = (page - 1) * limit
         end_index = start_index + limit
-        paginated_posts = posts[start_index:end_index]
+        paginated_posts = sorted_posts[start_index:end_index]
         return jsonify(paginated_posts)
-
-    return jsonify(posts)
+    return jsonify(sorted_posts)
 
 
 @app.route('/api/posts', methods=['GET', 'POST'])
