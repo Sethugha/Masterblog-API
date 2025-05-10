@@ -17,11 +17,14 @@ CORS(app)  # This will enable CORS for all routes
 def get_posts():
     posts = storage.load_json("data.json")
     title = request.args.get('title')
-
+    content = request.args.get('content')
     if title:
-        collection = [post for post in posts if post.get('title') == title]
+        collection = [post for post in posts if title in post.get('title')]
         return jsonify(collection)
-    """
+    if content:
+        collection = [post for post in posts if content in post.get('content')]
+        return jsonify(collection)
+
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 10))
     if page and limit:
@@ -29,7 +32,7 @@ def get_posts():
         end_index = start_index + limit
         paginated_posts = posts[start_index:end_index]
         return jsonify(paginated_posts)
-    """
+
     return jsonify(posts)
 
 
