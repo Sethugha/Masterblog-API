@@ -1,6 +1,5 @@
 import json
 
-
 def save_json(posts):
     with open('data.json', 'w', encoding='utf-8') as file:
         json.dump(posts, file, ensure_ascii=False, indent=4)
@@ -57,13 +56,7 @@ def update_post(updated_post, changes):
 
 
 def main():
-    posts = [
-        {"id": 1, "title": "First post", "content": "This is the first post."},
-        {"id": 2, "title": "Second post", "content": "This is the second post."},
-    ]
-    save_json(posts)
-    get_highest_id()
-
+    pass
 
 if __name__ == '__main__':
     main()

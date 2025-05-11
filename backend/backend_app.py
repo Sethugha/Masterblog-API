@@ -8,11 +8,9 @@ import storage
 app = Flask(__name__)
 limiter = Limiter(app=app, key_func=get_remote_address)
 CORS(app)  # This will enable CORS for all routes
-SWAGGER_URL="/api/docs"  # (1) swagger endpoint e.g. HTTP://localhost:5002/api/docs
-API_URL="/static/masterblog.json"
+SWAGGER_URL = "/api/docs"  # (1) swagger endpoint e.g. HTTP://localhost:5002/api/docs
+API_URL = "/static/masterblog.json"
 
-
-#app.run(host="0.0.0.0", port=5002, debug=True)
 
 @app.route('/api/posts', methods=['GET'])
 @limiter.limit("10/minute") #Limit to 10 requests per minute
