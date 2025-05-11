@@ -4,6 +4,7 @@ changing the rendering from server side to client side.
 
 ## Features
 backend running on codio-server uses CORS to enable access from users´ localhost.
+Access API-docs under "/api/docs/"
 
 ## Usage
 To run the project make sure to install the required packages listed in requirements.txt

@@ -1,3 +1,4 @@
 Flask==3.1.0
 flask_cors==5.0.1
 flask_limiter==3.12
+flask_swagger_ui==4.11.1

@@ -122,7 +122,7 @@ if __name__ == '__main__':
         SWAGGER_URL,
         API_URL,
         config={
-            'app_name': 'Masterblog-API'  # (3) You can change this if you like
+            'app_name': 'Masterblog-API'
         }
     )
     app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
