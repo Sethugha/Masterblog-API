@@ -9,22 +9,22 @@ def save_json(posts):
         json.dump(posts, file, indent=4)
 
 
-def load_json(filepath):
-    with open(filepath, 'r') as file:
+def load_json():
+    with open(STORAGE_PATH, 'r') as file:
         posts = json.load(file)
     return posts
 
 
 def get_highest_id():
     ids = []
-    posts = load_json('data.json')
+    posts = load_json()
     for post in posts:
         ids.append(post['id'])
     return int(max(ids))
 
 
 def delete_post(id):
-    posts = load_json('data.json')
+    posts = load_json()
     for post in posts:
         if post['id'] == id:
             posts.remove(post)
@@ -34,7 +34,7 @@ def delete_post(id):
 
 
 def add_post(post):
-    posts = load_json('data.json')
+    posts = load_json()
     new_id = get_highest_id() + 1
     post['id'] = new_id
     posts.append(post)
@@ -42,7 +42,7 @@ def add_post(post):
 
 
 def find_post_by_id(id):
-    posts = load_json('data.json')
+    posts = load_json()
     for post in posts:
         if post['id'] == id:
             return post
@@ -50,7 +50,7 @@ def find_post_by_id(id):
 
 
 def update_post(updated_post, changes):
-    posts = load_json('data.json')
+    posts = load_json()
     for post in posts:
         if post['id'] == updated_post['id']:
             post.update(changes)

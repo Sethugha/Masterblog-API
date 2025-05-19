@@ -15,7 +15,7 @@ API_URL = "/static/masterblog.json"
 @app.route('/api/posts', methods=['GET'])
 @limiter.limit("10/minute") #Limit to 10 requests per minute
 def get_posts():
-    posts = storage.load_json("data.json")
+    posts = storage.load_json()
     title = request.args.get('title')
     content = request.args.get('content')
     if title:
@@ -49,7 +49,7 @@ def get_posts():
 def posts():
     if request.method == 'GET':
         # Handle the GET request
-        posts = storage.load_json("data.json")
+        posts = storage.load_json()
         return jsonify(posts)
 
     elif request.method == 'POST':
