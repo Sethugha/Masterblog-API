@@ -1,8 +1,12 @@
 import json
+import os
+
+STORAGE_PATH = f"""{os.path.abspath(os.path.join(os.path.dirname(__file__), 'data.json'))}"""
+
 
 def save_json(posts):
-    with open('data.json', 'w', encoding='utf-8') as file:
-        json.dump(posts, file, ensure_ascii=False, indent=4)
+    with open(STORAGE_PATH, 'w') as file:
+        json.dump(posts, file, indent=4)
 
 
 def load_json(filepath):
