@@ -1,20 +1,30 @@
-# Blog-API
-Now combining fresh learned API creating and the Blog of the last 2 repositories,
-changing the rendering from server side to client side.
+# Masterblog-API
+The Masterblog API is a first contact with the creation of RESTful APIs
+It simulates the management of a blog written in Python via web interface 
+using this api.
 
+## Getting started
+To start the project and begin experimenting with this currently rudimentary API
+you need first to install the packages listed in requirements.txt.
+From folder Masterblog-API start backend/backend.py
+(terminal: python3 backend/backend_app.py)
+Use, if possible, another computer to host the frontend (which requires a second installation process mirroring this process here.)
+Nevertheless, to enable using he same Machine for frontend hosting, the application uses CORS thus using both applications
+on the same host should work smoothly.
 
-## Features
-backend running on codio-server uses CORS to enable access from users´ localhost.
-Access API-docs under "/api/docs/"
-###Endpoints:
-/ : Blog Posts homepage. If necessary, change the backend url shown under the title to your own backend-url.
-    Afterwards click 'load Posts' to retrieve all posts from storage.
+###Some hints for frontend and API: 
 
-###Adding posts:
-on the homepage fill the fields following the placeholders for title and content and click 'add Post'
-To delete posts click the delete button on the right side of the post to delete.
+-The API has rate limits
+-The API returns request responses in JSON format. When an API request returns an error, it is sent in the JSON response as an error key.
+-To show the endpoints which are not cast in webpages an api documentation accessible via <backend-host>:5002/api/docs 
+ has been implemented with swagger 
+-The only direct accessible page is the index page  on 
+ <frontend-host>5001/ 
+-there you can view all posts by using the 'load posts' button
+-add new posts by filling title and content into the form fields and clicking the 'add Post' button
+-delete posts using the 'delete post' button on the right side of every post.
+-Operations like search, sort or update are only avilable via REST-tool like postman or SoapUI. 
 
+###Rate and usage limits
+API access rate limits apply at a client connection in unit time. The default limit is 10 requests per minute. 
 
-## Usage
-To run the project make sure to install the required packages listed in requirements.txt
-Run backend_app.py to start the web server, frontend_app.py to enable client side rendering.
