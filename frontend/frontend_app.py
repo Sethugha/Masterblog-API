@@ -5,6 +5,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home():
+    """Displays the index page of the frontend application.
+    The API-endpoints and their methods are currently tested with postman."""
     return render_template("index.html")
 
 

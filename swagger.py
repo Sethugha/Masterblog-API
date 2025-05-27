@@ -11,6 +11,3 @@ swagger_ui_blueprint = get_swaggerui_blueprint(
     }
 )
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
-
-if __name__ == '__main__':
-    main()

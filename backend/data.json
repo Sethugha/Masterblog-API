@@ -7,26 +7,26 @@
     {
         "id": 2,
         "title": "Artus an alle",
-        "content": "Ich bin dann mal wirklich stinksauer! Nicht nur, daß ihr reichlich verrostet seid, sondern..."
+        "content": "Ich bin dann mal wirklich stinksauer! Nicht nur, da\u00df ihr reichlich verrostet seid, sondern..."
     },
     {
         "id": 3,
         "title": "Camelot ist abgebrannt",
-        "content": "...daß wieder mal irgendjemand die Glotze angelassen hat.."
-    },
-    {
-        "id": 4,
-        "title": "Feucht",
-        "content": "In der feuchten Bude ist das tödlich für die Elektrik."
+        "content": "...da\u00df wieder mal irgendjemand die Glotze angelassen hat.."
     },
     {
         "id": 5,
         "title": "Sprinkler",
-        "content": "Außerdem hat da ein gewisser Zauberer geschludert. Die Sprinkler hatten nämlich kein Wasser, da war ÖL drin!"
+        "content": "Au\u00dferdem hat da ein gewisser Zauberer geschludert. Die Sprinkler hatten n\u00e4mlich kein Wasser, da war \u00d6L drin!"
     },
     {
         "title": "Merlin",
         "content": "Du gehts heute ohne Abendessen ins Bett!",
         "id": 6
+    },
+    {
+        "title": "Merlin an Artus",
+        "content": "Ich wars nicht, Morgana hat wieder mit Feuer gespielt.",
+        "id": 7
     }
 ]
