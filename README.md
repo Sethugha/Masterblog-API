@@ -12,7 +12,7 @@ Use, if possible, another computer to host the frontend (which requires a second
 Nevertheless, to enable using he same Machine for frontend hosting, the application uses CORS thus using both applications
 on the same host should work smoothly.
 
-###Some hints for frontend and API: 
+##Some hints for frontend and API: 
 
 -The API has rate limits
 -The API returns request responses in JSON format. When an API request returns an error, it is sent in the JSON response as an error key.
