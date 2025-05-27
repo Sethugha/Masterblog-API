@@ -1,5 +1,5 @@
 # Masterblog-API
-The Masterblog API is a first contact with the creation of RESTful APIs
+The Masterblog API is a first contact with the creation of RESTful APIs.
 It simulates the management of a blog written in Python via web interface 
 using this api.
 
