@@ -1,5 +1,6 @@
 import json
 import os
+from flask import jsonify
 
 """
 Retrieve the absolute path of the storage file. The relative path fails sometimes
@@ -13,10 +14,15 @@ def save_json(posts):
     Saves the complete in-memory storage
     into the storage file determined by STORAGE_PATH.
     :parameter posts: Storage variable (in-memory storage)
-    :return: No return
+    :returns: None if successful,
+              error-message including exception-details if not.
     """
-    with open(STORAGE_PATH, 'w') as file:
-        json.dump(posts, file, indent=4)
+    try:
+        with open(STORAGE_PATH, 'w') as file:
+            json.dump(posts, file, indent=4)
+        return None
+    except Exception as e:
+        return f"Error saving data in {STORAGE_PATH}. The exception {e} thwarted the procss."
 
 
 def load_json():
@@ -25,33 +31,41 @@ def load_json():
     as list of dictionaries.
     return: List of dict
     """
-    with open(STORAGE_PATH, 'r') as file:
-        posts = json.load(file)
-    return posts
+    try:
+        with open(STORAGE_PATH, 'r') as file:
+            posts = json.load(file)
+        return posts
+    except Exception as e:
+        return f"Error loading {STORAGE_PATH}. Exception {e}!"
 
 
 def get_highest_id():
     """ loads all posts to find the highest id. Returns the highest id as int. """
     ids = []
-    posts = load_json()
-    for post in posts:
-        ids.append(post['id'])
-    return int(max(ids))
+    posts = load_json()     #test file access
+    if isinstance(posts, str):
+        return posts #Error-message from file access
+    return max(post['id'] for post in posts)
 
 
 def delete_post(id):
     """
     Deletes post with given id.
     :parameter id: Id of the post to be deleted
-    :returns: Message containing post id if successful
+    :returns: post if is sucessfully deleted
+              Errormessage including exception if file access failed.
               None if the deletion failed. No causal investigation yet.
     """
     posts = load_json()
+    if isinstance(posts, str):
+        return posts    # Error-message from file access
     for post in posts:
         if post['id'] == id:
             posts.remove(post)
-            save_json(posts)
-            return f"Successfully deleted {post}"
+            possible_error = save_json(posts)
+            if possible_error:
+                return possible_error   # Error-message from file access
+            return post
     return None
 
 
@@ -67,10 +81,15 @@ def add_post(post):
     No return
     """
     posts = load_json()
+    if isinstance(posts, str):
+        return posts       # Error-message from file access
     new_id = get_highest_id() + 1
     post['id'] = new_id
     posts.append(post)
-    save_json(posts)
+    possible_error = save_json(posts)
+    if possible_error:
+        return possible_error   # Error-message from file access
+    return None
 
 
 def find_post_by_id(id):
@@ -82,6 +101,8 @@ def find_post_by_id(id):
              'None' if not
     """
     posts = load_json()
+    if isinstance(posts, str):
+        return posts    # Error-message from file access
     for post in posts:
         if post['id'] == id:
             return post
@@ -100,17 +121,13 @@ def update_post(updated_post, changes):
              'None' if unsuccessful.
     """
     posts = load_json()
+    if isinstance(posts, str):
+        return posts    # Error-message from file access
     for post in posts:
         if post['id'] == updated_post['id']:
             post.update(changes)
-            save_json(posts)
-            return f"Successfully changed post: {post}"
+            possible_error = save_json(posts)
+            if possible_error:
+                return possible_error
+            return post
     return None
-
-
-def main():
-    """Only used for simple tests"""
-    pass
-
-if __name__ == '__main__':
-    main()

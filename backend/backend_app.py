@@ -22,7 +22,8 @@ def get_posts():
     :parameters page, limit: Pagination of the posts with <page> pages having <limit> posts each.
     """
     posts = storage.load_json()
-
+    if isinstance(posts, str):
+        return jsonify({"error": posts}), 500
     sort = request.args.get('sort')
     direction = request.args.get('direction')
     if sort and direction:
@@ -59,6 +60,8 @@ def search_posts():
     :parameters page, limit: Pagination of the posts with <page> pages having <limit> posts each.
     """
     posts = storage.load_json()
+    if isinstance(posts, str):
+        return jsonify({"error": posts}), 500
     title = request.args.get('title')
     content = request.args.get('content')
     if title:
@@ -95,22 +98,17 @@ def create_new_posts():
     :returns: jsonified post-data and code 201,
               in case of failed validation an error message and code 400 are sent
     """
-    if request.method == 'GET':
-        # Handle the GET request
-        posts = storage.load_json()
-        return jsonify(posts)
-
-    elif request.method == 'POST':
-        # Handle the POST request
-        new_post = request.get_json()
-        if not validate_post_data(new_post):
-            return jsonify({"error": "Invalid post data"}), 400
-        storage.add_post(new_post)
-        return jsonify(new_post), 201
+    new_post = request.get_json()
+    if not validate_post_data(new_post):
+        return jsonify({"error": "Invalid post data"}), 400
+    possible_error = storage.add_post(new_post)
+    if possible_error:
+        return jsonify({"error": possible_error}), 500
+    return jsonify(new_post), 201
 
 
 @app.route('/api/posts/<int:id>', methods=['PUT'])
-def handle_post(id):
+def update_existing_post(id):
     """
     Finds the post with the given ID using the storage´s find function.
     uses GET-method to get the id of the post to change,
@@ -119,17 +117,17 @@ def handle_post(id):
     :returns:jsonified post,
              404 if there is no post with the given id.
     """
-
     post = storage.find_post_by_id(id)
-
+    if isinstance(post, str):
+        return jsonify({"error": post}), 500
     # If the post wasn't found, return a 404 error
     if post is None:
         return '', 404
-
     # Update the post with the new data
     new_data = request.get_json()
     updated_post = storage.update_post(post, new_data)
-    # Return the updated post
+    if isinstance(updated_post, str):
+        return jsonify({"error": updated_post}), 500
     return jsonify(updated_post)
 
 
@@ -142,17 +140,11 @@ def delete_post(id):
     :returns: jsonified data from the deleted post,
               , Error 404 if there is no post having the given id.
     """
-    # Find the post with the given ID
     post = storage.find_post_by_id(id)
-
     # If the post wasn't found, return a 404 error
     if post is None:
         return '', 404
-
-    # Remove the book from the list
     deleted_post = storage.delete_post(id)
-
-    # Return the deleted post
     return jsonify(deleted_post)
 
 
