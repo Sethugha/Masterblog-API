@@ -17,22 +17,11 @@ API_URL = "/static/masterblog.json"
 def get_posts():
     """
     Retrieves all posts from storage (json-file)
-    under consideration of the search specs listed below:
-    :parameter title: (usage: url/?title=<search term>)
-                      retrieve posts having the search term somewhere in the title.
-    :parameter content: Retrieves posts having the search term somewhere in the content.
+    according as parameters are given for sorting and/or pagination
     :parameters sort, direction: Sort the posts according to the direction
     :parameters page, limit: Pagination of the posts with <page> pages having <limit> posts each.
     """
     posts = storage.load_json()
-    title = request.args.get('title')
-    content = request.args.get('content')
-    if title:
-        collection = [post for post in posts if title in post.get('title')]
-        return jsonify(collection)
-    if content:
-        collection = [post for post in posts if content in post.get('content')]
-        return jsonify(collection)
 
     sort = request.args.get('sort')
     direction = request.args.get('direction')
@@ -41,7 +30,6 @@ def get_posts():
             sorted_posts = sorted(posts, key=lambda item: item[sort], reverse=True)
         else:
             sorted_posts = sorted(posts, key=lambda item: item[sort])
-
     else:
         sorted_posts = posts
     page = int(request.args.get('page', 1))
@@ -54,10 +42,53 @@ def get_posts():
     return jsonify(sorted_posts)
 
 
-@app.route('/api/posts', methods=['GET', 'POST'])
-def posts():
+@app.route('/api/posts/search', methods=['GET'])
+@limiter.limit("10/minute") #Limit to 10 requests per minute
+def search_posts():
     """
-    Retrieves and displays all posts per default (on page load)
+    Retrieves all posts from storage (json-file)
+    under consideration of the search specs listed below.
+    The search is case-insensitive and finds fragments.
+    The sort and pagination features are also available after search.
+    :parameter title: (usage: url/?title=<search term>)
+                      retrieve posts having the search term somewhere in the title.
+                      Somewhere in... means that word parts are found too!
+    :parameter content: Retrieves posts having the search term somewhere in the content.
+                        Like the title search the content search finds word parts as well.
+    :parameters sort, direction: Sort the found posts according to the direction
+    :parameters page, limit: Pagination of the posts with <page> pages having <limit> posts each.
+    """
+    posts = storage.load_json()
+    title = request.args.get('title')
+    content = request.args.get('content')
+    if title:
+        collection = [post for post in posts if title.lower() in post.get('title').lower()]
+    if content:
+        collection = [post for post in posts if content.lower() in post.get('content').lower()]
+    posts = collection
+    sort = request.args.get('sort')
+    direction = request.args.get('direction')
+    if sort and direction:
+        if direction == 'desc':
+            sorted_posts = sorted(posts, key=lambda item: item[sort], reverse=True)
+        else:
+            sorted_posts = sorted(posts, key=lambda item: item[sort])
+    else:
+        sorted_posts = posts
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 10))
+    if page and limit:
+        start_index = (page - 1) * limit
+        end_index = start_index + limit
+        paginated_posts = sorted_posts[start_index:end_index]
+        return jsonify(paginated_posts)
+    return jsonify(sorted_posts)
+
+
+@app.route('/api/posts', methods=['POST'])
+def create_new_posts():
+    """
+    Creates a new post from the form fields.
     If the add post button is hit, the data of the form fields are sent via POST
     method to the backend. Detecting this kind of request, the function validates
     the message body for having valid data and sends the new pos to the storage module
